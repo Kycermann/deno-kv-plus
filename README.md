@@ -1,4 +1,4 @@
-# 🌟 Deno KV Plus → Transactions that `{ ok: true }` 🚀
+# Deno KV Plus → Transactions that `{ ok: true }` 🚀
 
 Upgrade your Deno KV code with **confidence** and **peace of mind**.
 
