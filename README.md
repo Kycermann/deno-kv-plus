@@ -1,6 +1,6 @@
-# 🌟 Introducing Safe Atomic Transactions for Deno KV 🚀
+# 🌟 KV Plus → Transactions that `{ ok: true }` 🚀
 
-Upgrade your Deno KV experience with **confidence** and **peace of mind**.
+Upgrade your Deno KV code with **confidence** and **peace of mind**.
 
 ## ✨ Features
 
