@@ -1,4 +1,4 @@
-# Deno KV Plus → Transactions that `{ ok: true }` 🚀
+# Deno KV Plus 🚀 Transactions that `{ ok: true }`
 
 Upgrade your Deno KV code with **confidence** and **peace of mind**.
 
@@ -19,7 +19,7 @@ Upgrade your Deno KV code with **confidence** and **peace of mind**.
 ## 🎁 A quick demo
 
 ```js
-import { withSafeAtomics } from "https://deno.land/x/kv/mod.ts";
+import { withSafeAtomics } from "https://deno.land/x/kvp/mod.ts";
 
 // Create a KV instance with atomic support
 const kv = withSafeAtomics(await Deno.openKv());
@@ -43,7 +43,7 @@ A convenient version of `setSafeAtomicMany` for updating just one key. This func
 #### 🌟 Starter template
 
 ```ts
-import { withSafeAtomics } from "https://deno.land/x/kv/mod.ts";
+import { withSafeAtomics } from "https://deno.land/x/kvp/mod.ts";
 
 const kv = withSafeAtomics(await Deno.openKv());
 
@@ -73,7 +73,7 @@ const { ok, error } = await kv.setAtomic(
 #### 🌟 Starter template
 
 ```ts
-import { withSafeAtomics } from "https://deno.land/x/kv/mod.ts";
+import { withSafeAtomics } from "https://deno.land/x/kvp/mod.ts";
 
 const kv = withSafeAtomics(await Deno.openKv());
 
@@ -101,7 +101,7 @@ const { ok, error } = await kv.setAtomicMany(
 #### 📚 Complex example
 
 ```js
-import { withSafeAtomics } from "https://deno.land/x/kv/mod.ts";
+import { withSafeAtomics } from "https://deno.land/x/kvp/mod.ts";
 
 // Create a KV instance with atomicMany support
 const kv = withSafeAtomics(await Deno.openKv());
