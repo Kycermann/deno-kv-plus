@@ -2,6 +2,9 @@
 
 Upgrade your Deno KV code with **confidence** and **peace of mind**.
 
+| **Quick links** | [📖 Denoland](https://deno.land/x/kvp) | [🏟️ Discord](https://discord.mieszko.xyz/deno-kv-plus) | [🔗 Article](https://mieszko.xyz/deno-kv-plus) |
+| - | - | - | - |
+
 ## ✨ Features
 
 ### 🛡️ Safety First
