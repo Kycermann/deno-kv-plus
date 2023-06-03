@@ -11,7 +11,7 @@ Upgrade your Deno KV code with **confidence** and **peace of mind**.
 
 ### 🦾 Unwavering Reliability
 
-- Our system tries the same transaction/calculation until the write is successful without interference.
+- The system tries the same transaction/calculation until the write is successful without interference.
 - Every attempt fetches the freshest data and recalculates if the data changes.
 - Update process can be aborted if values change and the update is no longer valid (e.g. insufficient balance to complete a transfer).
 - Zero dependencies for ultimate compatibility.
@@ -134,4 +134,4 @@ if (ok) {
 
 ## 🌱 Contributing
 
-We appreciate your contributions! Please open an issue first to discuss any changes before submitting a Pull Request to avoid any disappointment.
+I appreciate your contributions! Please open an issue first to discuss any changes before submitting a Pull Request to avoid disappointment. By opening an issue or Pull Request, you agree that the content is your own work and you grant an unlimited, non exclusive non revokable licence for your work to be used in this project.
