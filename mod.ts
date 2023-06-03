@@ -1,10 +1,12 @@
+type MayBePromise<T> = Promise<T> | T;
+
 export type DenoKvWithSafeAtomics = Deno.Kv & {
   setSafeAtomicMany: (
     keys: any[][],
     updateValues: (
       values: unknown[],
       abort: (reason?: string) => void,
-    ) => unknown[] | void,
+    ) => MayBePromise<unknown[] | void>,
     retryCount?: number,
   ) => Promise<SafeAtomicResponse>;
 
@@ -13,7 +15,7 @@ export type DenoKvWithSafeAtomics = Deno.Kv & {
     updateValue: (
       value: unknown,
       abort: (reason?: string) => void,
-    ) => unknown | void,
+    ) => MayBePromise<unknown | void>,
     retryCount?: number,
   ) => Promise<SafeAtomicResponse>;
 };
@@ -56,7 +58,7 @@ async function setSafeAtomicMany(
   updateValues: (
     values: unknown[],
     abort: (reason?: string) => void,
-  ) => unknown[] | void,
+  ) => MayBePromise<unknown[] | void>,
   retryCount: number = 10,
 ): Promise<SafeAtomicResponse> {
   const results = await this.getMany(keys);
@@ -74,7 +76,7 @@ async function setSafeAtomicMany(
   };
 
   // @ts-ignore
-  const updatedValues = updateValues(
+  const updatedValues = await updateValues(
     resultValues,
     abort,
   ) as unknown as any as unknown[];
@@ -115,7 +117,7 @@ async function setSafeAtomic(
   updateValue: (
     value: unknown,
     abort: (reason?: string) => void,
-  ) => unknown | void,
+  ) => MayBePromise<unknown | void>,
   retryCount: number,
 ) {
   return this.setSafeAtomicMany(
