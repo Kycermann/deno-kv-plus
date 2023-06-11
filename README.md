@@ -22,7 +22,7 @@ Upgrade your Deno KV code with **confidence** and **peace of mind**.
 ## 🎁 A quick demo
 
 ```js
-import { withSafeAtomics } from "https://deno.land/x/kvp/mod.ts";
+import { withSafeAtomics } from "https://deno.land/x/kvp@1.1.0/mod.ts";
 
 // Create a KV instance with atomic support
 const kv = withSafeAtomics(await Deno.openKv());
@@ -46,7 +46,7 @@ A convenient version of `setSafeAtomicMany` for updating just one key. This func
 #### 🌟 Starter template
 
 ```ts
-import { withSafeAtomics } from "https://deno.land/x/kvp/mod.ts";
+import { withSafeAtomics } from "https://deno.land/x/kvp@1.1.0/mod.ts";
 
 const kv = withSafeAtomics(await Deno.openKv());
 
@@ -70,13 +70,14 @@ const { ok, error } = await kv.setAtomic(
 | -------- | --------- | ------------------------------------------------------ |
 | `ok`     | `boolean` | Whether the update was successful.                     |
 | `error`  | `string`  | The error message if the update failed or was aborted. |
+| `value`  | `unknown` | The new value in Deno KV                               |
 
 ### `setSafeAtomicMany`
 
 #### 🌟 Starter template
 
 ```ts
-import { withSafeAtomics } from "https://deno.land/x/kvp/mod.ts";
+import { withSafeAtomics } from "https://deno.land/x/kvp@1.1.0/mod.ts";
 
 const kv = withSafeAtomics(await Deno.openKv());
 
@@ -100,11 +101,12 @@ const { ok, error } = await kv.setAtomicMany(
 | -------- | --------- | ------------------------------------------------------ |
 | `ok`     | `boolean` | Whether the update was successful.                     |
 | `error`  | `string`  | The error message if the update failed or was aborted. |
+| `values` | `unknown` | The new values in Deno KV                              |
 
 #### 📚 Complex example
 
 ```js
-import { withSafeAtomics } from "https://deno.land/x/kvp/mod.ts";
+import { withSafeAtomics } from "https://deno.land/x/kvp@1.1.0/mod.ts";
 
 // Create a KV instance with atomicMany support
 const kv = withSafeAtomics(await Deno.openKv());

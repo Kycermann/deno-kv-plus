@@ -27,12 +27,13 @@ Deno.test("setSafeAtomic update the values", async () => {
 
   // Act
   const kv = withSafeAtomics(await Deno.openKv());
-  await kv.setSafeAtomic(mockKey, updateValue);
+  const result = await kv.setSafeAtomic(mockKey, updateValue);
   const { value: newValue } = await kv.get(mockKey);
   await kv.close();
 
   // Assert
   assertEquals(newValue, mockValue);
+  assertEquals(result, { ok: true, error: null, value: newValue });
 });
 
 Deno.test("setSafeAtomicMany updates multiple values", async () => {
@@ -49,7 +50,7 @@ Deno.test("setSafeAtomicMany updates multiple values", async () => {
 
   // Act
   const kv = withSafeAtomics(await Deno.openKv());
-  await kv.setSafeAtomicMany(keys, updateValues, retryCount);
+  const result = await kv.setSafeAtomicMany(keys, updateValues, retryCount);
   const { value: newValue1 } = await kv.get(mockKey1);
   const { value: newValue2 } = await kv.get(mockKey2);
   await kv.close();
@@ -57,6 +58,7 @@ Deno.test("setSafeAtomicMany updates multiple values", async () => {
   // Assert
   assertEquals(newValue1, mockUpdatedValue1);
   assertEquals(newValue2, mockUpdatedValue2);
+  assertEquals(result, { ok: true, error: null, values: [newValue1, newValue2] });
 });
 
 Deno.test(
@@ -66,9 +68,10 @@ Deno.test(
     const mockKey = ["test", "abc"];
     const mockValue = "123";
     const mockUpdatedValue = "new value";
+    const abortReason = "Testing";
 
-    const updateValue = (_value: unknown, abort: () => void): unknown => {
-      abort();
+    const updateValue = (_value: unknown, abort: (reason?: string) => void): unknown => {
+      abort(abortReason);
 
       return mockUpdatedValue;
     };
@@ -76,12 +79,13 @@ Deno.test(
     // Act
     const kv = withSafeAtomics(await Deno.openKv());
     await kv.set(mockKey, mockValue);
-    await kv.setSafeAtomic(mockKey, updateValue);
+    const result = await kv.setSafeAtomic(mockKey, updateValue);
     const { value: newValue } = await kv.get(mockKey);
     await kv.close();
 
     // Assert
     assertEquals(newValue, mockValue);
+    assertEquals(result, { ok: false, error: abortReason, value: mockValue });
   },
 );
 
@@ -96,13 +100,14 @@ Deno.test(
     const mockUpdatedValue1 = "new value 1";
     const mockUpdatedValue2 = "new value 2";
     const mockUpdatedValues = [mockUpdatedValue1, mockUpdatedValue2];
+    const abortReason = "Testing";
 
     const keys = [mockKey1, mockKey2];
     const updateValues = (
       _values: unknown[],
-      abort: () => void,
+      abort: (reason?: string) => void,
     ): unknown[] | void => {
-      abort();
+      abort(abortReason);
       return mockUpdatedValues;
     };
     const retryCount = 3;
@@ -113,7 +118,7 @@ Deno.test(
     await kv.set(mockKey2, mockValue2);
 
     // Act
-    await kv.setSafeAtomicMany(keys, updateValues, retryCount);
+    const result = await kv.setSafeAtomicMany(keys, updateValues, retryCount);
     const { value: newValue1 } = await kv.get(mockKey1);
     const { value: newValue2 } = await kv.get(mockKey2);
     await kv.close();
@@ -121,6 +126,7 @@ Deno.test(
     // Assert
     assertEquals(newValue1, mockValue1);
     assertEquals(newValue2, mockValue2);
+    assertEquals(result, { ok: false, error: abortReason, values: [mockValue1, mockValue2] });
   },
 );
 
