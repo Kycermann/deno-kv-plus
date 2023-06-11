@@ -6,7 +6,7 @@ export type DenoKvWithSafeAtomics = Deno.Kv & {
       abort: (reason?: string) => void,
     ) => unknown[] | void,
     retryCount?: number,
-  ) => Promise<SafeAtomicResponse>;
+  ) => Promise<SafeAtomicManyResponse>;
 
   setSafeAtomic: (
     key: any[],
@@ -15,12 +15,20 @@ export type DenoKvWithSafeAtomics = Deno.Kv & {
       abort: (reason?: string) => void,
     ) => unknown | void,
     retryCount?: number,
-  ) => Promise<SafeAtomicResponse>;
+  ) => Promise<SafeAtomicSingleResponse>;
 };
 
 export type SafeAtomicResponse = {
   ok: boolean;
   error: string | null;
+};
+
+export type SafeAtomicSingleResponse = SafeAtomicResponse & {
+  value: unknown;
+};
+
+export type SafeAtomicManyResponse = SafeAtomicResponse & {
+  values: unknown[];
 };
 
 /**
@@ -58,7 +66,7 @@ async function setSafeAtomicMany(
     abort: (reason?: string) => void,
   ) => unknown[] | void,
   retryCount: number = 10,
-): Promise<SafeAtomicResponse> {
+): Promise<SafeAtomicManyResponse> {
   const results = await this.getMany(keys);
   const resultValues: unknown[] = results.map(
     (result: Deno.KvEntryMaybe<unknown>) => result.value,
@@ -73,12 +81,15 @@ async function setSafeAtomicMany(
     if (reason) abortReason = reason;
   };
 
+  // Save original values (to return if we abort)
+  const originalResultValues = structuredClone(resultValues);
+
   // @ts-ignore
   const updatedValues = updateValues(
     resultValues,
     abort,
   ) as unknown as any as unknown[];
-  if (aborting) return { ok: false, error: abortReason };
+  if (aborting) return { ok: false, error: abortReason, values: originalResultValues };
 
   if (!updatedValues) {
     throw new Error("updateValues must return an array of values to update");
@@ -100,10 +111,10 @@ async function setSafeAtomicMany(
 
   const { ok } = await tx.commit();
 
-  if (ok) return { ok, error: null };
+  if (ok) return { ok, error: null, values: updatedValues };
 
   if (!ok && retryCount === 0) {
-    return { ok, error: "Failed to commit transaction" };
+    return { ok, error: "Failed to commit transaction", values: originalResultValues };
   }
 
   return this.setSafeAtomicMany(keys, updateValues, retryCount - 1);
@@ -117,12 +128,14 @@ async function setSafeAtomic(
     abort: (reason?: string) => void,
   ) => unknown | void,
   retryCount: number,
-) {
-  return this.setSafeAtomicMany(
+): Promise<SafeAtomicSingleResponse> {
+  const { ok, error, values } = await this.setSafeAtomicMany(
     [key],
     (values: unknown[], abort: (reason?: string) => void) => {
       return [updateValue(values[0], abort)];
     },
     retryCount,
   );
+
+  return { ok, error, value: values[0] };
 }
