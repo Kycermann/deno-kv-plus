@@ -85,7 +85,7 @@ Deno.test(
 
     // Assert
     assertEquals(newValue, mockValue);
-    assertEquals(result, { ok: false, error: abortReason, value: mockValue })
+    assertEquals(result, { ok: false, error: abortReason, value: mockValue });
   },
 );
 
