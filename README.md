@@ -97,11 +97,11 @@ const { ok, error } = await kv.setAtomicMany(
 
 #### 📦 Return object
 
-| Property  | Type      | Description                                            |
-| --------- | --------- | ------------------------------------------------------ |
-| `ok`      | `boolean` | Whether the update was successful.                     |
-| `error`   | `string`  | The error message if the update failed or was aborted. |
-| `values`  | `unknown` | The new values in Deno KV                              |
+| Property | Type      | Description                                            |
+| -------- | --------- | ------------------------------------------------------ |
+| `ok`     | `boolean` | Whether the update was successful.                     |
+| `error`  | `string`  | The error message if the update failed or was aborted. |
+| `values` | `unknown` | The new values in Deno KV                              |
 
 #### 📚 Complex example
 
