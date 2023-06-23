@@ -50,7 +50,7 @@ import { withSafeAtomics } from "https://deno.land/x/kvp@1.1.0/mod.ts";
 
 const kv = withSafeAtomics(await Deno.openKv());
 
-const { ok, error } = await kv.setAtomic(
+const { ok, error } = await kv.setSafeAtomic(
   ["this is one", "and the same", "example key"],
   (value, abort) => value,
 );
@@ -81,7 +81,7 @@ import { withSafeAtomics } from "https://deno.land/x/kvp@1.1.0/mod.ts";
 
 const kv = withSafeAtomics(await Deno.openKv());
 
-const { ok, error } = await kv.setAtomicMany(
+const { ok, error } = await kv.setSafeAtomicMany(
   [["example", "key", 1], ["example", "key", 2]],
   (values, abort) => values,
 );
